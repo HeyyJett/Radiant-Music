@@ -16,9 +16,9 @@ CREATE TABLE music (
 );
 
 CREATE TABLE user_music (
-    music_id INT,
     user_id INT,
-    status VARCHAR(255),
+    music_id INT,
+    status ENUM('INCOMEPLETE', 'IN-PROGRESS', 'COMPLETE'),
     primary key(music_id, user_id),
     foreign key (music_id) references music(music_id),
     foreign key (user_id) references users(user_id)
@@ -39,5 +39,17 @@ insert into music(title, artist_name, length_sec) values('Runaway', 'Galantis', 
 -- Users
 insert into users(username, password) values('Cris', 'EDM');
 insert into users(username, password) values('Jason', 'EDM');
-insert into users(username, password) values('Bryan', 'EDM');
+insert into users(username, password) values('Bryan', 'Hiphop');
 insert into users(username, password) values('Darshan', 'EDM');
+
+-- User_Music
+insert into user_music(user_id, music_id, status) values(1, 1, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(1, 2, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(1, 3, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(1, 4, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(2, 5, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(2, 6, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(3, 7, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(3, 8, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(4, 9, 'INCOMEPLETE');
+insert into user_music(user_id, music_id, status) values(4, 10, 'INCOMEPLETE');
