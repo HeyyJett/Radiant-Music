@@ -98,13 +98,14 @@ public class Main {
             	break;
             case 5:
             	addSongMenu();
-            	//break;
+            	break;
             case 6:
             	userLoggedIn = false;
             	break;
         	default:
         		System.out.println("Sorry please choose option on the list.");
         	}
+        	
     	}
     	
     	sc.close();
