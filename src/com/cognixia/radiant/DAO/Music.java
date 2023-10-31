@@ -6,7 +6,7 @@ public class Music {
 	private String artist_name;
 	private int length_sec;
 	
-	Music(int music_id, String title, String artist_name, int length_sec){
+	public Music(int music_id, String title, String artist_name, int length_sec){
 		this.music_id = music_id;
 		this.title = title;
 		this.artist_name = artist_name;
