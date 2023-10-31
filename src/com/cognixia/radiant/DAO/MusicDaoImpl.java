@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.cognixia.radiant.connection.ConnectionManager;
 
@@ -73,24 +72,32 @@ public class MusicDaoImpl implements MusicDao{
 	}
 
 	@Override
-	public boolean addMusicById(int id) {
-		// TODO Auto-generated method stub
+	public boolean addMusicById(int id, int user_id) {
 		return false;
 	}
 
 	@Override
-	public List<Music> getMusicByStatus(String status) {
-		// TODO Auto-generated method stub
+	public List<Music> getMusicByStatus(String status, int user_id) {
 		return null;
 	}
 
 	@Override
-	public boolean addMusicToStatus(String status) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addMusicToStatus(String status, int user_id, int music_id) {
+
+		try(PreparedStatement pStmt = connection.prepareStatement("update user_music set status = ?, where user_id = ? AND music_id = ?"){
+
+			pStmt.setString(1, status);
+			pStmt.setInt(2, user_id);
+			pStmt.setInt(3, music_id);
+
+			int StatusChange = pStmt.executeUpdate();
+
+			return StatusChange > 0;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
-	
-	
 	
 }
