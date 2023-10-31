@@ -85,7 +85,7 @@ public class MusicDaoImpl implements MusicDao{
 		
 		List<Music> musicList = new ArrayList<>();
 		
-		try(PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM music WHERE music_id IN (SELECT * FROM user_music WHERE status = ? AND user_id = ?)")){
+		try(PreparedStatement pstmt = connection.prepareStatement("SELECT music_id FROM music WHERE music_id IN (SELECT music_id FROM user_music WHERE status = ? AND user_id = ?)")){
 			pstmt.setString(1, status);
 			pstmt.setInt(2, user_id);
 			
