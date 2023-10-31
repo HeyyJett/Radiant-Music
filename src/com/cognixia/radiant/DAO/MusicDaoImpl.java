@@ -92,36 +92,36 @@ public class MusicDaoImpl implements MusicDao{
 
 	@Override
 	public List<Music> getMusicByStatus(String status, int user_id) {
-    List<Music> musicList = new ArrayList<>();
 
-    try(PreparedStatement pstmt = connection.prepareStatement("SELECT music_id FROM music WHERE music_id IN (SELECT music_id FROM user_music WHERE status = ? AND user_id = ?)")){
-      pstmt.setString(1, status);
-      pstmt.setInt(2, user_id);
+		List<Music> musicList = new ArrayList<>();
 
-      ResultSet rs = pstmt.executeQuery();
+		try (PreparedStatement pstmt = connection.prepareStatement("SELECT music_id FROM music WHERE music_id IN (SELECT music_id FROM user_music WHERE status = ? AND user_id = ?)")) {
+			pstmt.setString(1, status);
+			pstmt.setInt(2, user_id);
 
-      while(rs.next()) {
-        int id = rs.getInt("music_id");
-        String title = rs.getString("title");
-        String artist_name = rs.getString("artist_name");
-        int length_sec = rs.getInt("length_sec");
+			ResultSet rs = pstmt.executeQuery();
 
-        rs.close();
+			while (rs.next()) {
+				int id = rs.getInt("music_id");
+				String title = rs.getString("title");
+				String artist_name = rs.getString("artist_name");
+				int length_sec = rs.getInt("length_sec");
 
-        Music music = new Music(id, title, artist_name, length_sec);
-        musicList.add(music);
+				rs.close();
 
-        return musicList;
+				Music music = new Music(id, title, artist_name, length_sec);
+				musicList.add(music);
 
-      }
+				return musicList;
 
-    }
-    catch(SQLException e) {
-      e.printStackTrace();
-    }
+			}
 
-    return musicList;
-  }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return musicList;
+	}
 
 	@Override
 	public boolean addMusicToStatus(String status, int user_id, int music_id){
