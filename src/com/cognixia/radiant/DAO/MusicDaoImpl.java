@@ -74,6 +74,19 @@ public class MusicDaoImpl implements MusicDao{
 
 	@Override
 	public boolean addMusicById(int id, int user_id) {
+
+		try(PreparedStatement pstmt = connection.prepareStatement("INSERT INTO user_music (user_id, id, status) VALUES (?, ?, 'INCOMEPLETE')")) {
+			pstmt.setInt(1, id);
+			pstmt.setInt(1, user_id);
+			int count=pstmt.executeUpdate();
+			if(count>0) {
+				return true;
+			}
+
+		}
+		catch(SQLException e){
+			System.out.println("Wrong ID Entered");
+		}
 		return false;
 	}
 
@@ -113,7 +126,7 @@ public class MusicDaoImpl implements MusicDao{
 	@Override
 	public boolean addMusicToStatus(String status, int user_id, int music_id){
 
-		try(PreparedStatement pStmt = connection.prepareStatement("update user_music set status = ?, where user_id = ? AND music_id = ?"){
+		try(PreparedStatement pStmt = connection.prepareStatement("update user_music set status = ?, where user_id = ? AND music_id = ?")){
 
 			pStmt.setString(1, status);
 			pStmt.setInt(2, user_id);
