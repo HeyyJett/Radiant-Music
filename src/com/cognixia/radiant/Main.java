@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Main {
 
+
     public static void main(String[] args) {
        
     	Scanner sc = new Scanner(System.in);
@@ -55,7 +56,7 @@ public class Main {
     	String password = sc.nextLine();
     	
     	//
-    	if (username.equals("jason") && password.equals("123")) {
+    	if (username.equals("Jason") && password.equals("123")) {
     		userMenu();
     	}
     	else {
@@ -72,7 +73,7 @@ public class Main {
     	Scanner sc = new Scanner(System.in);
     	
     	while (userLoggedIn) {
-    		System.out.println("\nWelcome _____ please choose an option:" );
+    		System.out.println("\nWelcome please choose an option:" );
         	System.out.println("-----------------------------------------");
         	System.out.println("1: Display all songs");
             System.out.println("2: Display incomplete songs");
@@ -98,7 +99,7 @@ public class Main {
             	break;
             case 5:
             	addSongMenu();
-            	break;
+            	//break;
             case 6:
             	userLoggedIn = false;
             	break;
@@ -116,25 +117,75 @@ public class Main {
 	 Scanner sc = new Scanner(System.in);
 	 
 	 System.out.println("\nAdding Song:");
-     System.out.println("------------");
-     System.out.println("Please enter the title of the song: ");
+	 System.out.println("------------");
+	 System.out.println("which category would you like to add to?: ");
+	 System.out.println("-----------------------------------------");
+ 	 System.out.println("1: Incomplete");
+     System.out.println("2: In Progress");
+     System.out.println("3: Complete");
+     
+	 int userOption3 = sc.nextInt();
+ 	
+ 	switch (userOption3) {
+     case 1:
+     	addToIncompleteMenu();
+     	break;
+     case 2:
+     	addToInProgressMenu();
+     	break;
+     case 3:
+     	addToCompleteMenu();
+     	break;
+     default:
+    	 System.out.println("Sorry please choose option on the list.");
+ 	}
+     
+     
+     sc.close();
+
+
+ }
+ 	
+ 
+ static void addToIncompleteMenu() {
+	 Scanner sc = new Scanner(System.in);
+	 
+	 System.out.println("Please enter the title of the song: ");
      String addTitle = sc.nextLine();
      System.out.println("Please enter the artist of the song: ");
      String addArtist = sc.nextLine();
      System.out.println("Please enter the length of the song in sec: ");
      int addLength = sc.nextInt();
      
-     System.out.println("\nThe song '" + addTitle + "' was added to the list");
-     
-     
+     System.out.println("\nThe song '" + addTitle + "' was added to 'incomplete'");
      sc.close();
-     //userMenu();
-
  }
- 	
     
-    
-    
+ static void addToInProgressMenu() {
+	 Scanner sc = new Scanner(System.in);
+	 
+	 System.out.println("Please enter the title of the song: ");
+     String addTitle = sc.nextLine();
+     System.out.println("Please enter the artist of the song: ");
+     String addArtist = sc.nextLine();
+     System.out.println("Please enter the length of the song in sec: ");
+     int addLength = sc.nextInt();
+     
+     System.out.println("\nThe song '" + addTitle + "' was added to 'in progress'");
+ }
+ 
+ static void addToCompleteMenu() {
+	 Scanner sc = new Scanner(System.in);
+	 
+	 System.out.println("Please enter the title of the song: ");
+     String addTitle = sc.nextLine();
+     System.out.println("Please enter the artist of the song: ");
+     String addArtist = sc.nextLine();
+     System.out.println("Please enter the length of the song in sec: ");
+     int addLength = sc.nextInt();
+     
+     System.out.println("\nThe song '" + addTitle + "' was added to 'complete'");
+ }
     
 }
 
