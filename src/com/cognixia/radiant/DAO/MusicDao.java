@@ -15,11 +15,11 @@ public interface MusicDao {
 		public List<Music> getAllMusic();
 		
 		//Adding music by id
-		public boolean addMusicById(int id);
+		public boolean addMusicById(int id, int user_id);
 	
 		//Getting music by status
-		public List<Music> getMusicByStatus(String  status);
+		public List<Music> getMusicByStatus(String status, int user_id);
 		
 		//Adding music by status
-		public boolean addMusicToStatus(String status);
+		public boolean addMusicToStatus(String status, int user_id);
 }
