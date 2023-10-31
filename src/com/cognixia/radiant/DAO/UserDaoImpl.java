@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.cognixia.radiant.connection.ConnectionManager;
 
 public class UserDaoImpl {
+	private static Optional<User> currUser;
 	private Connection connection = null;
 
 //	@Override
@@ -43,6 +44,7 @@ public class UserDaoImpl {
 				User userObj = new User(user_id, username, password);
 				Optional<User> userFound = Optional.of(userObj);
 				
+				currUser = userFound;
 				return userFound;
 				
 			}
