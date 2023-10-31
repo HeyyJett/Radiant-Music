@@ -44,6 +44,7 @@ public class ConnectionManager {
 
     public static Connection getConnection() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {
 
+    	
         // Do not make the connection again if we are already connected
         if(connection == null) {
             makeConnection();
