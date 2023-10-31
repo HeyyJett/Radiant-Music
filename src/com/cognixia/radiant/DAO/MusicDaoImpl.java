@@ -2,6 +2,7 @@ package com.cognixia.radiant.DAO;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.interfaces.RSAKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -73,19 +74,48 @@ public class MusicDaoImpl implements MusicDao{
 	}
 
 	@Override
-	public boolean addMusicById(int id) {
+	public boolean addMusicById(int id, int user_id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public List<Music> getMusicByStatus(String status) {
+	public List<Music> getMusicByStatus(String status, int user_id) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		List<Music> musicList = new ArrayList<>();
+		
+		try(PreparedStatement pstmt = connection.prepareStatement("SELECT music_id FROM music WHERE music_id IN (SELECT music_id FROM user_music WHERE status = ? AND user_id = ?)")){
+			pstmt.setString(1, status);
+			pstmt.setInt(2, user_id);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				int id = rs.getInt("music_id");
+				String title = rs.getString("title");
+				String artist_name = rs.getString("artist_name");
+				int length_sec = rs.getInt("length_sec");
+				
+				rs.close();
+				
+				Music music = new Music(id, title, artist_name, length_sec);
+				musicList.add(music);
+				
+				return musicList;
+				
+			}
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return musicList;
 	}
 
 	@Override
-	public boolean addMusicToStatus(String status) {
+	public boolean addMusicToStatus(String status, int user_id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
