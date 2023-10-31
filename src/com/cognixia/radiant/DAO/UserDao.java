@@ -10,5 +10,5 @@ public interface UserDao {
 		// as well, this method will help with closing the connection
 		public void closeConnection() throws SQLException ;
 		
-public Optional<User> getUsernameAndPassword();
+		public Optional<User> getUsernameAndPassword(User user);
 }

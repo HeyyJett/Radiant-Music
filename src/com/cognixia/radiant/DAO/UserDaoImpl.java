@@ -1,5 +1,7 @@
 package com.cognixia.radiant.DAO;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,24 +10,38 @@ import java.util.Optional;
 
 import com.cognixia.radiant.connection.ConnectionManager;
 
-public class UserDaoImpl {
+public class UserDaoImpl implements UserDao{
 	private static Optional<User> currUser;
 	private Connection connection = null;
 
-//	@Override
-//	public void establishConnection() throws ClassNotFoundException, SQLException {
-//		
-//		if(connection == null) {
-//			connection = ConnectionManager.getConnection();
-//		}
-//	}
-//	
-//	@Override
-//	public void closeConnection() throws SQLException {
-//		connection.close();
-//	}
+	@Override
+	public void establishConnection() throws ClassNotFoundException, SQLException {
+		
+		if(connection == null) {
+			try {
+				connection = ConnectionManager.getConnection();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	
-	public Optional<User> getUserByUsernameAndPassword(User user) {
+	@Override
+	public void closeConnection() throws SQLException {
+		connection.close();
+	}
+	
+	public Optional<User> getUsernameAndPassword(User user) {
 		
 		try(PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")){
 			
@@ -55,6 +71,6 @@ public class UserDaoImpl {
 		
 		return Optional.empty();
 	}
-	
+
 	
 }
