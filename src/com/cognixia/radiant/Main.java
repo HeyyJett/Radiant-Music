@@ -2,10 +2,30 @@ package com.cognixia.radiant;
 
 import java.util.Scanner;
 
+import com.cognixia.radiant.DAO.MusicDaoImpl;
+import com.cognixia.radiant.DAO.User;
+import com.cognixia.radiant.DAO.UserDaoImpl;
+
 public class Main {
 
+	public static UserDaoImpl userDao=new UserDaoImpl();
+	public static MusicDaoImpl musicDao=new MusicDaoImpl();
 
     public static void main(String[] args) {
+    	
+       
+       try {
+		userDao.establishConnection();
+		musicDao.establishConnection();
+		
+		
+		
+		
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
+       
+       
        
     	Scanner sc = new Scanner(System.in);
  
@@ -46,6 +66,8 @@ public class Main {
     
     static void login() {
     	
+    	
+    	
     	Scanner sc = new Scanner(System.in);
     	
     	System.out.println("Please enter your username:");
@@ -55,13 +77,16 @@ public class Main {
     	System.out.println("Please enter your password:");
     	String password = sc.nextLine();
     	
-    	//
-    	if (username.equals("Jason") && password.equals("123")) {
-    		userMenu();
-    	}
-    	else {
-    		System.out.println("Login Error");
-    	}
+    	User user=new User(username,password);
+    	userDao.getUsernameAndPassword(user);
+    	
+    	System.out.println("done");
+//    	if (username.equals("Jason") && password.equals("123")) {
+//    		userMenu();
+//    	}
+//    	else {
+//    		System.out.println("Login Error");
+//    	}
     	
     	sc.close();
     }
