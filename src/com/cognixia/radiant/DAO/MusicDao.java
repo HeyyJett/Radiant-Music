@@ -21,5 +21,7 @@ public interface MusicDao {
 		public List<Music> getMusicByStatus(String status, int user_id);
 		
 		//Adding music by status
-		public boolean addMusicToStatus(String status, int user_id);
+		public boolean addMusicToStatus(String status, int user_id, int music_id);
+
+	boolean addMusicById(int id);
 }
