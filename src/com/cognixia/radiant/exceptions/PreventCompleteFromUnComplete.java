@@ -2,8 +2,8 @@ package com.cognixia.radiant.exceptions;
 
 public class PreventCompleteFromUnComplete extends Exception {
 
-    public PreventCompleteFromUnComplete(){
-        super("You cannot move this music from 'Uncompleted' to 'Completed'. You must move music to 'In-Progress' first.");
+    public PreventCompleteFromUnComplete(String CurrentStatus, String TargetStatus){
+        super("You cannot move Music Category from " + CurrentStatus + " to " + TargetStatus + ".");
     }
 
 }

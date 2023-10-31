@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cognixia.radiant.connection.ConnectionManager;
+import com.cognixia.radiant.exceptions.PreventCompleteFromUnComplete;
 
 public class MusicDaoImpl implements MusicDao{
 	private Connection connection = null;
@@ -126,7 +127,14 @@ public class MusicDaoImpl implements MusicDao{
 	@Override
 	public boolean addMusicToStatus(String status, int user_id, int music_id){
 
-		try(PreparedStatement pStmt = connection.prepareStatement("update user_music set status = ?, where user_id = ? AND music_id = ?")){
+		// Get current Status
+		String currentStatus = getCurrentMusicStatus(user_id, music_id, status);
+
+		// Check if current status didn't return an error
+		if(currentStatus.equals("ERROR"))
+			return false;
+
+		try(PreparedStatement pStmt = connection.prepareStatement("update user_music set status = ?, where user_id = ? AND music_id = ?")) {
 
 			pStmt.setString(1, status);
 			pStmt.setInt(2, user_id);
@@ -140,5 +148,35 @@ public class MusicDaoImpl implements MusicDao{
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public String getCurrentMusicStatus(int user_id, int music_id, String status){
+
+		String currentStatus = "ERROR";
+
+		try(Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT status FROM user_music where user_id = ? AND music_id = ?")){
+
+			if(rs.next()){
+				currentStatus = rs.getString(1);
+			}
+
+			if 	(currentStatus.equals(status) ||
+					(currentStatus.equals("INCOMEPLETE") && status.equals("COMPLETED")) ||
+					(currentStatus.equals("IN-PROGRESS") && status.equals("INCOMEPLETE")) ||
+					(currentStatus.equals("COMPLETED") && status.equals("IN-PROGRESS")) ||
+					(currentStatus.equals("COMPLETED") && status.equals("INCOMEPLETE")))
+				throw new PreventCompleteFromUnComplete(currentStatus, status);
+			else
+				return currentStatus;
+
+		}catch (SQLException e){
+			e.printStackTrace();
+
+		} catch (PreventCompleteFromUnComplete e) {
+			e.getMessage();
+		}
+
+		return currentStatus;
 	}
 }
