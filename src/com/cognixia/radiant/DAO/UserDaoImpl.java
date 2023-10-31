@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import com.cognixia.radiant.connection.ConnectionManager;
+import com.cognixia.radiant.exceptions.InvalidLoginException;
 
 public class UserDaoImpl implements UserDao{
 	private static Optional<User> currUser;
@@ -41,7 +42,7 @@ public class UserDaoImpl implements UserDao{
 		connection.close();
 	}
 	
-	public Optional<User> getUsernameAndPassword(User user) {
+	public Optional<User> getUsernameAndPassword(User user) throws InvalidLoginException {
 		
 		try(PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")){
 			
@@ -60,16 +61,18 @@ public class UserDaoImpl implements UserDao{
 				User userObj = new User(user_id, username, password);
 				Optional<User> userFound = Optional.of(userObj);
 				
+				
 				currUser = userFound;
 				return userFound;
-				
 			}
+			
+			
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return Optional.empty();
+		throw new InvalidLoginException();
 	}
 
 	
