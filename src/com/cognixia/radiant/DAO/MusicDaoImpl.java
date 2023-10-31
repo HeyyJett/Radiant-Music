@@ -127,12 +127,5 @@ public class MusicDaoImpl implements MusicDao{
 			e.printStackTrace();
 			return false;
 		}
-}
-
-	@Override
-	public boolean addMusicToStatus(String status, int user_id) {
-		// TODO Auto-generated method stub
-		return false;
 	}
-	
 }
