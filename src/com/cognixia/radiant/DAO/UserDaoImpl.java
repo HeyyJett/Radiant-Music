@@ -75,5 +75,8 @@ public class UserDaoImpl implements UserDao{
 		throw new InvalidLoginException();
 	}
 
-	
+	// This will help us get the user for user_id in the menu
+	public Optional<User> getCurrUser() {
+		return currUser;
+	}
 }
