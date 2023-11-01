@@ -46,7 +46,7 @@ public class MusicDaoImpl implements MusicDao{
 	
 	public List<Music> getAllMusic() {
 		
-		List<Music> musicList = new ArrayList<>();
+		List<Music> musicList= new ArrayList<>();
 		
 		try(Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM music")){
@@ -57,9 +57,13 @@ public class MusicDaoImpl implements MusicDao{
 				String artist_name = rs.getString("artist_name");
 				int length_sec = rs.getInt("length_sec");
 				
+				rs.close();
+				
 				Music music = new Music(id, title, artist_name, length_sec);
 				musicList.add(music);
-
+				
+				return musicList;
+				
 			}
 		}
 		catch(SQLException e) {
@@ -70,13 +74,12 @@ public class MusicDaoImpl implements MusicDao{
 	}
 
 	@Override
-	public boolean addMusicById(int music_id, int user_id) {
+	public boolean addMusicById(int id, int user_id) {
 
-		try(PreparedStatement pstmt = connection.prepareStatement("INSERT INTO user_music(user_id, music_id, status) VALUES (?, ?, 'INCOMPLETE')")) {
+		try(PreparedStatement pstmt = connection.prepareStatement("INSERT INTO user_music (user_id, id, status) VALUES (?, ?, 'INCOMEPLETE')")) {
+			pstmt.setInt(1, id);
 			pstmt.setInt(1, user_id);
-			pstmt.setInt(2, music_id);
 			int count=pstmt.executeUpdate();
-
 			if(count>0) {
 				return true;
 			}
@@ -93,7 +96,7 @@ public class MusicDaoImpl implements MusicDao{
 
 		List<Music> musicList = new ArrayList<>();
 
-		try (PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM music WHERE music_id IN (SELECT music_id FROM user_music WHERE status = ? AND user_id = ?)")) {
+		try (PreparedStatement pstmt = connection.prepareStatement("SELECT music_id FROM music WHERE music_id IN (SELECT music_id FROM user_music WHERE status = ? AND user_id = ?)")) {
 			pstmt.setString(1, status);
 			pstmt.setInt(2, user_id);
 
@@ -105,12 +108,14 @@ public class MusicDaoImpl implements MusicDao{
 				String artist_name = rs.getString("artist_name");
 				int length_sec = rs.getInt("length_sec");
 
+				rs.close();
+
 				Music music = new Music(id, title, artist_name, length_sec);
 				musicList.add(music);
 
-			}
+				return musicList;
 
-			rs.close();
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -129,7 +134,7 @@ public class MusicDaoImpl implements MusicDao{
 		if(currentStatus.equals("ERROR"))
 			return false;
 
-		try(PreparedStatement pStmt = connection.prepareStatement("update user_music set status = ? where user_id = ? AND music_id = ?")) {
+		try(PreparedStatement pStmt = connection.prepareStatement("update user_music set status = ?, where user_id = ? AND music_id = ?")) {
 
 			pStmt.setString(1, status);
 			pStmt.setInt(2, user_id);
@@ -145,36 +150,31 @@ public class MusicDaoImpl implements MusicDao{
 		}
 	}
 
-	public String getCurrentMusicStatus(int user_id, int music_id, String status) throws PreventCompleteFromUnComplete{
+	public String getCurrentMusicStatus(int user_id, int music_id, String status){
 
 		String currentStatus = "ERROR";
 
-		try(PreparedStatement pStmt = connection.prepareStatement("SELECT status FROM user_music where user_id = ? AND music_id = ?")){
-
-			pStmt.setInt(1, user_id);
-			pStmt.setInt(2, music_id);
-
-			ResultSet rs = pStmt.executeQuery();
+		try(Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT status FROM user_music where user_id = ? AND music_id = ?")){
 
 			if(rs.next()){
 				currentStatus = rs.getString(1);
 			}
 
 			if 	(currentStatus.equals(status) ||
-					(currentStatus.equals("INCOMPLETE") && status.equals("COMPLETE")) ||
-					(currentStatus.equals("COMPLETE") && status.equals("IN-PROGRESS")) ||
-					(currentStatus.equals("COMPLETE") && status.equals("INCOMPLETE")))
+					(currentStatus.equals("INCOMEPLETE") && status.equals("COMPLETED")) ||
+					(currentStatus.equals("IN-PROGRESS") && status.equals("INCOMEPLETE")) ||
+					(currentStatus.equals("COMPLETED") && status.equals("IN-PROGRESS")) ||
+					(currentStatus.equals("COMPLETED") && status.equals("INCOMEPLETE")))
 				throw new PreventCompleteFromUnComplete(currentStatus, status);
 			else
 				return currentStatus;
 
 		}catch (SQLException e){
 			e.printStackTrace();
-			currentStatus = "ERROR";
 
 		} catch (PreventCompleteFromUnComplete e) {
-			System.out.println(e.getMessage());
-			currentStatus = "ERROR";
+			e.getMessage();
 		}
 
 		return currentStatus;
