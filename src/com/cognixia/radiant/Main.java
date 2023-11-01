@@ -30,7 +30,7 @@ public class Main {
 
 		while(true) {
 
-			System.out.println("Welcome to The Radiant Music Network, please choose an option!");
+			System.out.println("Welcome to The Radiant Music Network hig, please choose an option!");
 			System.out.println("--------------------------------------------------------------");
 			System.out.println("1: Explore song list");
 			System.out.println("2: Login");
